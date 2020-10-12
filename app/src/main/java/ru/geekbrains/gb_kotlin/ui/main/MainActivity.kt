@@ -1,32 +1,31 @@
-package ru.geekbrains.gb_kotlin
+package ru.geekbrains.gb_kotlin.ui.main
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.geekbrains.gb_kotlin.R
 
 class MainActivity : AppCompatActivity() {
+
     lateinit var viewModel: MainViewModel
+    lateinit var adapter: NotesRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        push.setOnClickListener {
-            viewModel.buttonClicked()
-        }
+        rv_notes.layoutManager = GridLayoutManager(this, 2)
+        adapter = NotesRVAdapter()
+        rv_notes.adapter = adapter
 
-        // Create the observer which updates the UI.
-        val mainObserver = Observer<String> { value ->
-            Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
-        }
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        val liveData = viewModel.getDataLiveData()
-        liveData.observe(this, mainObserver)
+        viewModel.viewState().observe(this, Observer<MainViewState> { t ->
+            t?.let { adapter.notes = it.notes }
+        })
     }
 }

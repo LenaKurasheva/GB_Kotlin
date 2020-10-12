@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GB_Kotlin</string>
+    <string name="title">Заметки</string>
+    <string name="item_note_title_text">Очень важная заметка</string>
+    <string name="item_note_body_text">Очень важная заметка с очень важной информацией</string>
+</resources>
