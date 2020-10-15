@@ -4,4 +4,7 @@
     <string name="title">Заметки</string>
     <string name="item_note_title_text">Очень важная заметка</string>
     <string name="item_note_body_text">Очень важная заметка с очень важной информацией</string>
+    <string name="note_title">Заголовок</string>
+    <string name="note_body">Текст заметки</string>
+    <string name="new_note_title">Новая заметка</string>
 </resources>
