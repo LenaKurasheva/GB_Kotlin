@@ -3,4 +3,7 @@
     <string name="title">Notes</string>
     <string name="item_note_title_text">Very important note</string>
     <string name="item_note_body_text">My very important note text with very important information</string>
+    <string name="note_title">Title</string>
+    <string name="note_body">Note text</string>
+    <string name="new_note_title">New note</string>
 </resources>
