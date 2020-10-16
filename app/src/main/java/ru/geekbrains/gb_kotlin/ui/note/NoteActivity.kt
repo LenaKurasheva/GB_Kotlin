@@ -3,10 +3,7 @@ package ru.geekbrains.gb_kotlin.ui.note
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
 import ru.geekbrains.gb_kotlin.data.model.Color
 import ru.geekbrains.gb_kotlin.data.model.Note
+import ru.geekbrains.gb_kotlin.utils.afterTextChanged
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,15 +66,6 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun addTextChangeListeners(){
-        fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-            this.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(editable: Editable?) {
-                    afterTextChanged.invoke(editable.toString())
-                }
-            })
-        }
         et_title.afterTextChanged { saveNote() }
         et_body.afterTextChanged { saveNote() }
     }
