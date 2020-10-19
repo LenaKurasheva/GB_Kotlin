@@ -1,13 +1,13 @@
-package ru.geekbrains.gb_kotlin.data.model
+package com.LenaKurasheva.notes.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class Note(val id: String,
-                val title: String,
-                val note: String,
+data class Note(val id: String = "",
+                val title: String = "",
+                val note: String = "",
                 val color: Color = Color.values()[Random().nextInt(Color.values().size)],
                 val lastChanged: Date = Date()): Parcelable {
 

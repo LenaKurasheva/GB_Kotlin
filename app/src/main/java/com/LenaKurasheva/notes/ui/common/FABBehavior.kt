@@ -1,4 +1,4 @@
-package ru.geekbrains.gb_kotlin.ui.common
+package com.LenaKurasheva.notes.ui.common
 
 import android.annotation.SuppressLint
 import android.content.Context

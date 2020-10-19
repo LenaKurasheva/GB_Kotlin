@@ -1,17 +1,15 @@
-package ru.geekbrains.gb_kotlin.ui.main
+package com.LenaKurasheva.notes.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.geekbrains.gb_kotlin.R
-import ru.geekbrains.gb_kotlin.data.model.Color
-import ru.geekbrains.gb_kotlin.data.model.Note
+import com.LenaKurasheva.notes.data.model.Color
+import com.LenaKurasheva.notes.data.model.Note
 
 class NotesRVAdapter (val onClickListener: ((Note) -> Unit)? = null): RecyclerView.Adapter<NotesRVAdapter.NoteViewHolder>() {
 
