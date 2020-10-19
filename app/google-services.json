@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "87152442770",
+    "firebase_url": "https://gbkotlin-c2136.firebaseio.com",
+    "project_id": "gbkotlin-c2136",
+    "storage_bucket": "gbkotlin-c2136.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87152442770:android:cdb780adc8d0de15e9954b",
+        "android_client_info": {
+          "package_name": "com.LenaKurasheva.notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87152442770-cnv40qmbeng0ls5q12a3q4912v0lomf9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.LenaKurasheva.notes",
+            "certificate_hash": "2ff8dcb1bd8db96914296eaba99f3bdc9babc5f4"
+          }
+        },
+        {
+          "client_id": "87152442770-jan5nu8a5bjq9pafs8svlftin7qi9koi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxtXKbW762_6MNGNcOSJ22CfghcgmE6AM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87152442770-jan5nu8a5bjq9pafs8svlftin7qi9koi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
