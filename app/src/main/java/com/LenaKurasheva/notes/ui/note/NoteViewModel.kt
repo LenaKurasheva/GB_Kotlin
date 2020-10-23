@@ -14,16 +14,17 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
     }
 
     private var pendingNote: Note? = null
+    var noteByIdLiveData: LiveData<NoteResult>? = null
 
-    private val notesObserver = Observer{ result: NoteResult? ->
-        result ?: return@Observer
-        when (result){
-            is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(result.data as? Note)
-            is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
+    private val notesObserver = object : Observer<NoteResult> {
+        override fun onChanged(result: NoteResult?) {
+            when (result) {
+                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(result.data as? Note)
+                is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
+            }
+            noteByIdLiveData?.removeObserver(this)
         }
     }
-
-    var NoteByIdLiveData: LiveData<NoteResult>? = null
 
     fun saveChanges(note: Note) {
         pendingNote = note
@@ -34,11 +35,11 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
         pendingNote?.let {
             Repository.saveNote(it)
         }
-        NoteByIdLiveData?.removeObserver(notesObserver)
+        noteByIdLiveData?.removeObserver(notesObserver)
     }
 
     fun loadNote(id: String){
-        NoteByIdLiveData = Repository.getNoteById(id)
-        NoteByIdLiveData?.observeForever(notesObserver)
+        noteByIdLiveData = Repository.getNoteById(id)
+        noteByIdLiveData?.observeForever(notesObserver)
     }
 }
