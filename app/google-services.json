@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:87152442770:android:cdb780adc8d0de15e9954b",
+        "mobilesdk_app_id": "1:87152442770:android:da710536bdb9be21e9954b",
         "android_client_info": {
-          "package_name": "com.LenaKurasheva.notes"
+          "package_name": "com.lenakurasheva.notes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "87152442770-cnv40qmbeng0ls5q12a3q4912v0lomf9.apps.googleusercontent.com",
+          "client_id": "87152442770-qccupdip3ihb1ambeluv20les07m757c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.LenaKurasheva.notes",
+            "package_name": "com.lenakurasheva.notes",
             "certificate_hash": "2ff8dcb1bd8db96914296eaba99f3bdc9babc5f4"
           }
         },

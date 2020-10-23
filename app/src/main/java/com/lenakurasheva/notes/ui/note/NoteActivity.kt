@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.ui.note
+package com.lenakurasheva.notes.ui.note
 
 import android.content.Context
 import android.content.Intent
@@ -10,9 +10,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
-import com.LenaKurasheva.notes.data.model.Color
-import com.LenaKurasheva.notes.data.model.Note
-import com.LenaKurasheva.notes.ui.base.BaseActivity
+import com.lenakurasheva.notes.data.model.Color
+import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 

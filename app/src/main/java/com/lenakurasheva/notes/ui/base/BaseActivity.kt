@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.ui.base
+package com.lenakurasheva.notes.ui.base
 
 import android.os.Bundle
 import android.widget.Toast

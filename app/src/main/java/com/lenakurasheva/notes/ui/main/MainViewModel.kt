@@ -1,11 +1,11 @@
-package com.LenaKurasheva.notes.ui.main
+package com.lenakurasheva.notes.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.LenaKurasheva.notes.data.Repository
-import com.LenaKurasheva.notes.data.model.Note
-import com.LenaKurasheva.notes.data.model.NoteResult
-import com.LenaKurasheva.notes.ui.base.BaseViewModel
+import com.lenakurasheva.notes.data.Repository
+import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.model.NoteResult
+import com.lenakurasheva.notes.ui.base.BaseViewModel
 
 class MainViewModel : BaseViewModel<List<Note>?, MainViewState>() {
 

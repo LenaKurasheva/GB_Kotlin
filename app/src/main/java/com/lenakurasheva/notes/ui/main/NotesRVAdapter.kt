@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.ui.main
+package com.lenakurasheva.notes.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.geekbrains.gb_kotlin.R
-import com.LenaKurasheva.notes.data.model.Color
-import com.LenaKurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.model.Color
+import com.lenakurasheva.notes.data.model.Note
 
 class NotesRVAdapter (val onClickListener: ((Note) -> Unit)? = null): RecyclerView.Adapter<NotesRVAdapter.NoteViewHolder>() {
 

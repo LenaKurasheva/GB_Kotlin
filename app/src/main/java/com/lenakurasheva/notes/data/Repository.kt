@@ -1,8 +1,8 @@
-package com.LenaKurasheva.notes.data
+package com.lenakurasheva.notes.data
 
-import com.LenaKurasheva.notes.data.model.Note
-import com.LenaKurasheva.notes.data.provider.DataProvider
-import com.LenaKurasheva.notes.data.provider.FirestoreDataProvider
+import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.provider.DataProvider
+import com.lenakurasheva.notes.data.provider.FirestoreDataProvider
 
 object Repository {
     val dataProvider: DataProvider = FirestoreDataProvider()

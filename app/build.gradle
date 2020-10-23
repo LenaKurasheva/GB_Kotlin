@@ -12,7 +12,7 @@ androidExtensions {
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.LenaKurasheva.notes"
+        applicationId "com.lenakurasheva.notes"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1

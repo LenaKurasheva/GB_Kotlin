@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.data.model
+package com.lenakurasheva.notes.data.model
 
 sealed class NoteResult {
     data class Success<out T>(val data: T): NoteResult()

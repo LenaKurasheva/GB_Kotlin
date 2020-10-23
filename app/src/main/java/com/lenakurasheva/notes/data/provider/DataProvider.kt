@@ -1,8 +1,8 @@
-package com.LenaKurasheva.notes.data.provider
+package com.lenakurasheva.notes.data.provider
 
 import androidx.lifecycle.LiveData
-import com.LenaKurasheva.notes.data.model.Note
-import com.LenaKurasheva.notes.data.model.NoteResult
+import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.model.NoteResult
 
 interface DataProvider {
     fun getNotes(): LiveData<NoteResult>

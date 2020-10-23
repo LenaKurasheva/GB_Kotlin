@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.ui.base
+package com.lenakurasheva.notes.ui.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,13 +1,13 @@
-package com.LenaKurasheva.notes.ui.main
+package com.lenakurasheva.notes.ui.main
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.geekbrains.gb_kotlin.R
-import com.LenaKurasheva.notes.data.model.Note
-import com.LenaKurasheva.notes.ui.base.BaseActivity
-import com.LenaKurasheva.notes.ui.note.NoteActivity
+import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.ui.base.BaseActivity
+import com.lenakurasheva.notes.ui.note.NoteActivity
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
 

@@ -1,4 +1,4 @@
-package com.LenaKurasheva.notes.ui.common
+package com.lenakurasheva.notes.ui.common
 
 import android.annotation.SuppressLint
 import android.content.Context
