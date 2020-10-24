@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.lenakurasheva.notes.common.getColorInt
+import com.lenakurasheva.notes.common.getColorRes
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.geekbrains.gb_kotlin.R
 import com.lenakurasheva.notes.data.model.Color
@@ -33,7 +35,6 @@ class NotesRVAdapter (val onClickListener: ((Note) -> Unit)? = null): RecyclerVi
         return notes.size
     }
 
-
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTV = itemView.tv_title
         private val bodyTV = itemView.tv_body
@@ -42,15 +43,7 @@ class NotesRVAdapter (val onClickListener: ((Note) -> Unit)? = null): RecyclerVi
             titleTV.text = title
             bodyTV.text = this.note
 
-            val color = when (color) {
-                Color.WHITE -> R.color.color_white
-                Color.YELLOW -> R.color.color_yello
-                Color.GREEN -> R.color.color_green
-                Color.BLUE -> R.color.color_blue
-                Color.RED -> R.color.color_red
-                Color.VIOLET -> R.color.color_violet
-            }
-            (itemView as CardView).setCardBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, color, null))
+            (itemView as CardView).setCardBackgroundColor(color.getColorInt(itemView.context))
 
             itemView.setOnClickListener {
                 onClickListener?.invoke(note)

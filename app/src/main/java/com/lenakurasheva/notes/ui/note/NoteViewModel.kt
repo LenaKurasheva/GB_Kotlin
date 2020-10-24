@@ -22,7 +22,7 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
                 is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(result.data as? Note)
                 is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
             }
-            // убираем подписку сразу после того, как получен результат, т.к. он noteByIdLiveData - одноразовая
+            // убираем подписку сразу после того, как получен результат, т.к. noteByIdLiveData - одноразовая
             noteByIdLiveData?.removeObserver(this)
         }
     }
