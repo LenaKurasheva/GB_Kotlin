@@ -1,10 +1,18 @@
 package com.lenakurasheva.notes.ui.splash
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import com.lenakurasheva.notes.ui.base.BaseActivity
 import com.lenakurasheva.notes.ui.main.MainActivity
 
 class SplashActivity: BaseActivity<Boolean?, SplashViewState>() {
+
+    companion object{
+        fun start(context: Context) = Intent(context, SplashActivity::class.java).apply {
+            context.startActivity(this)
+        }
+    }
 
     override val viewModel by lazy { ViewModelProvider(this).get(SplashViewModel::class.java) }
     override val layoutRes = null
