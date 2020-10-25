@@ -3,7 +3,7 @@ package com.lenakurasheva.notes.ui.note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.lenakurasheva.notes.data.Repository
-import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
 import com.lenakurasheva.notes.ui.base.BaseViewModel
 

@@ -2,7 +2,7 @@ package com.lenakurasheva.notes.common
 
 import android.content.Context
 import androidx.core.content.res.ResourcesCompat
-import com.lenakurasheva.notes.data.model.Color
+import com.lenakurasheva.notes.data.entity.Color
 import ru.geekbrains.gb_kotlin.R
 
 fun Color.getColorRes() : Int = when (this) {

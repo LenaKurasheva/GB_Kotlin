@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.lenakurasheva.notes.common.getColorInt
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
-import com.lenakurasheva.notes.data.model.Color
-import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
