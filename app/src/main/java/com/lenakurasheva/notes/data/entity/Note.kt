@@ -1,4 +1,4 @@
-package com.lenakurasheva.notes.data.model
+package com.lenakurasheva.notes.data.entity
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

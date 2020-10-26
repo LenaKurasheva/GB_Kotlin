@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
+import com.lenakurasheva.notes.common.getColorInt
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
-import com.lenakurasheva.notes.data.model.Color
-import com.lenakurasheva.notes.data.model.Note
+import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.ui.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -74,15 +73,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
             et_title.setText(it.title)
             et_body.setText(it.note)
 
-            val color = when (it.color) {
-                Color.WHITE -> R.color.color_white
-                Color.YELLOW -> R.color.color_yello
-                Color.GREEN -> R.color.color_green
-                Color.BLUE -> R.color.color_blue
-                Color.RED -> R.color.color_red
-                Color.VIOLET -> R.color.color_violet
-            }
-            toolbar.setBackgroundColor(ResourcesCompat.getColor(resources, color, null))
+            toolbar.setBackgroundColor(it.color.getColorInt(this))
         }
         et_title.addTextChangedListener(textChangeListener)
         et_body.addTextChangedListener(textChangeListener)
