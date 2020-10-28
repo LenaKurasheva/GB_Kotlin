@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
 import com.lenakurasheva.notes.common.getColorInt
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.ui.base.BaseActivity
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,9 +27,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         }
     }
 
-    override val viewModel: NoteViewModel by lazy {
-        ViewModelProvider(this).get(NoteViewModel::class.java)
-    }
+    override val viewModel: NoteViewModel by viewModel()
     override val layoutRes = R.layout.activity_note
     private var note: Note? = null
 

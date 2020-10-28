@@ -7,7 +7,7 @@ import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
 import com.lenakurasheva.notes.ui.base.BaseViewModel
 
-class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
+class NoteViewModel(val repository: Repository) : BaseViewModel<Note?, NoteViewState>() {
 
     init {
         viewStateLiveData.value = NoteViewState()
@@ -34,14 +34,14 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
     // Этот метод будет вызван системой при окончательном уничтожении Activity:
     override fun onCleared() {
         pendingNote?.let {
-            Repository.saveNote(it)
+            repository.saveNote(it)
         }
         // убираем подписку в случае, если посреди запроса пользователь решил выйти назад, например
         noteByIdLiveData?.removeObserver(notesObserver)
     }
 
     fun loadNote(id: String){
-        noteByIdLiveData = Repository.getNoteById(id)
+        noteByIdLiveData = repository.getNoteById(id)
         noteByIdLiveData?.observeForever(notesObserver)
     }
 }
