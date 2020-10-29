@@ -9,4 +9,5 @@ class Repository(val dataProvider: DataProvider) {
     fun saveNote(note: Note) = dataProvider.saveNote(note)
     fun getNoteById(id: String) = dataProvider.getNoteById(id)
     fun getCurrentUser() = dataProvider.getCurrentUser()
+    fun deleteNote(id: String) = dataProvider.deleteNote(id)
 }

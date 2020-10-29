@@ -7,7 +7,7 @@ import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
 import com.lenakurasheva.notes.ui.base.BaseViewModel
 
-class NoteViewModel(val repository: Repository) : BaseViewModel<Note?, NoteViewState>() {
+class NoteViewModel(val repository: Repository) : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     init {
         viewStateLiveData.value = NoteViewState()
@@ -15,11 +15,13 @@ class NoteViewModel(val repository: Repository) : BaseViewModel<Note?, NoteViewS
 
     private var pendingNote: Note? = null
     var noteByIdLiveData: LiveData<NoteResult>? = null
+    private var deleteLiveData: LiveData<NoteResult>? = null
+
 
     private val notesObserver = object : Observer<NoteResult> {
         override fun onChanged(result: NoteResult?) {
             when (result) {
-                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(result.data as? Note)
+                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(NoteViewState.Data(result.data as? Note))
                 is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
             }
             // убираем подписку сразу после того, как получен результат, т.к. noteByIdLiveData - одноразовая
@@ -27,8 +29,31 @@ class NoteViewModel(val repository: Repository) : BaseViewModel<Note?, NoteViewS
         }
     }
 
+    private val deleteObserver = object : Observer<NoteResult> {
+        override fun onChanged(result: NoteResult?) {
+            when (result) {
+                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(NoteViewState.Data(isDeleted = true))
+                is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
+            }
+            deleteLiveData?.removeObserver(this)
+        }
+    }
+
     fun saveChanges(note: Note) {
         pendingNote = note
+    }
+
+    fun loadNote(id: String){
+        noteByIdLiveData = repository.getNoteById(id)
+        noteByIdLiveData?.observeForever(notesObserver)
+    }
+
+    fun deleteNote() {
+        pendingNote?.let {
+            deleteLiveData = repository.deleteNote(it.id)
+            deleteLiveData?.observeForever(deleteObserver)
+            pendingNote = null
+        }
     }
 
     // Этот метод будет вызван системой при окончательном уничтожении Activity:
@@ -38,10 +63,6 @@ class NoteViewModel(val repository: Repository) : BaseViewModel<Note?, NoteViewS
         }
         // убираем подписку в случае, если посреди запроса пользователь решил выйти назад, например
         noteByIdLiveData?.removeObserver(notesObserver)
-    }
-
-    fun loadNote(id: String){
-        noteByIdLiveData = repository.getNoteById(id)
-        noteByIdLiveData?.observeForever(notesObserver)
+        deleteLiveData?.removeObserver(deleteObserver)
     }
 }

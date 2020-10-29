@@ -47,6 +47,15 @@ class FirestoreDataProvider(val store: FirebaseFirestore, val auth: FirebaseAuth
             }
     }
 
+    override fun deleteNote(id: String) = MutableLiveData<NoteResult>().apply {
+        notesReference.document(id).delete()
+                .addOnSuccessListener {
+                    value = NoteResult.Success(null)
+                }.addOnFailureListener{
+                    value = NoteResult.Error(it)
+                }
+    }
+
     override fun getNoteById(id: String) = MutableLiveData<NoteResult>().apply {
         notesReference.document(id).get()
             .addOnSuccessListener { snapshot->

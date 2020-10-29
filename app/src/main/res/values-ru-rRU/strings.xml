@@ -8,7 +8,14 @@
     <string name="note_body">Текст заметки</string>
     <string name="new_note_title">Новая заметка</string>
     <string name="exit">Выход</string>
-    <string name="logout_title">Log out?</string>
-    <string name="logout_message">Are you shure?</string>
-    <string name="logout_cancel">Cancel</string>
+    <string name="logout_title">Выйти?</string>
+    <string name="logout_message">Вы уверены?</string>
+    <string name="logout_ok">Да</string>
+    <string name="logout_cancel">Отмена</string>
+    <string name="note_change_color">Изменить цвет</string>
+    <string name="note_delete">Удалить</string>
+    <string name="note_delete_title">Удаление</string>
+    <string name="note_delete_message">Удалить эту заметку?</string>
+    <string name="note_delete_ok">Да</string>
+    <string name="note_delete_cancel">Отмена</string>
 </resources>

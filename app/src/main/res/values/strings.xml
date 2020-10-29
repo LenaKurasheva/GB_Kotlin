@@ -11,4 +11,10 @@
     <string name="logout_message">Are you shure?</string>
     <string name="logout_ok">Ok</string>
     <string name="logout_cancel">Cancel</string>
+    <string name="note_change_color">Change color</string>
+    <string name="note_delete">Delete</string>
+    <string name="note_delete_title">Delete</string>
+    <string name="note_delete_message">Delete this note?</string>
+    <string name="note_delete_ok">Ok</string>
+    <string name="note_delete_cancel">Cancel</string>
 </resources>
