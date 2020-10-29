@@ -5,12 +5,10 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.animation.BounceInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.Dimension
 import com.lenakurasheva.notes.common.dip
-import com.lenakurasheva.notes.common.getColorRes
-import com.lenakurasheva.notes.data.entity.Color
+import com.lenakurasheva.notes.common.getColorList
 
 class ColorPickerView : LinearLayout {
 
@@ -21,7 +19,7 @@ class ColorPickerView : LinearLayout {
         @Dimension(unit = Dimension.DP) private const val COLOR_VIEW_PADDING = 8
     }
 
-    var onColorClickListener: (color: Color) -> Unit = { }
+    var onColorClickListener: (color: Int) -> Unit = { }
 
     val isOpen: Boolean
         get() = measuredHeight > 0
@@ -60,15 +58,14 @@ class ColorPickerView : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         orientation = HORIZONTAL
         gravity = Gravity.CENTER
-        //TODO вынести Color getColor() в  отдельный файл
-        Color.values().forEach { color ->
+        getColorList().forEach { color ->
             val view =  ColorCircleView(context).apply {
-                fillColorRes = color.getColorRes()
+                fillColorRes = color
                 tag = color
                 dip(COLOR_VIEW_PADDING).let {
                     setPadding(it, it, it, it)
                 }
-                setOnClickListener { onColorClickListener(it.tag as Color) }
+                setOnClickListener { onColorClickListener(it.tag as Int) }
             }
 
             addView(view)

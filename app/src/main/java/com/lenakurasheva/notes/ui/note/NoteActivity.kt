@@ -8,7 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import com.lenakurasheva.notes.common.getColorFromRes
 import com.lenakurasheva.notes.common.getColorInt
+import com.lenakurasheva.notes.common.toColor
 import com.lenakurasheva.notes.data.entity.Color
 import kotlinx.android.synthetic.main.activity_note.*
 import ru.geekbrains.gb_kotlin.R
@@ -81,8 +83,8 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         }
 
         colorPicker.onColorClickListener = {
-            toolbar.setBackgroundColor(it.getColorInt(this))
-            color = it
+            toolbar.setBackgroundColor(it.getColorFromRes(this))
+            color = it.toColor()
             saveNote()
         }
 
