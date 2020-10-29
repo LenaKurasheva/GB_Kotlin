@@ -7,7 +7,8 @@ import com.lenakurasheva.notes.data.entity.User
 import com.lenakurasheva.notes.data.errors.NoAuthException
 import com.lenakurasheva.notes.ui.base.BaseViewModel
 
-class SplashViewModel : BaseViewModel<Boolean?, SplashViewState>() {
+
+class SplashViewModel(val repository: Repository) : BaseViewModel<Boolean?, SplashViewState>() {
 
     var currentUserLiveData: LiveData<User?>? = null
     private val currentUserObserver = object : Observer<User?> {
@@ -20,7 +21,7 @@ class SplashViewModel : BaseViewModel<Boolean?, SplashViewState>() {
     }
 
     fun requestUser(){
-        currentUserLiveData = Repository.getCurrentUser()
+        currentUserLiveData = repository.getCurrentUser()
         currentUserLiveData?.observeForever(currentUserObserver)
     }
 
