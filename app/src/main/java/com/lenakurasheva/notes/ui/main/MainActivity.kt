@@ -10,7 +10,7 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.geekbrains.gb_kotlin.R
+import com.lenakurasheva.notes.R
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.ui.base.BaseActivity
 import com.lenakurasheva.notes.ui.note.NoteActivity

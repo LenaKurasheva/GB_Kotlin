@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
-import com.google.rpc.context.AttributeContext
 import com.lenakurasheva.notes.data.errors.NoAuthException
-import ru.geekbrains.gb_kotlin.R
+import com.lenakurasheva.notes.R
 
 abstract class BaseActivity<T, S: BaseViewState<T>> : AppCompatActivity() {
 

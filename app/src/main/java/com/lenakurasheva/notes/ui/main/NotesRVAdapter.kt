@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.lenakurasheva.notes.common.getColorInt
-import ru.geekbrains.gb_kotlin.R
+import com.lenakurasheva.notes.R
 import com.lenakurasheva.notes.data.entity.Note
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_note.*

@@ -1,4 +1,4 @@
-package ru.geekbrains.gb_kotlin;
+package com.lenakurasheva.notes;
 
 import org.junit.Test;
 

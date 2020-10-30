@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.geekbrains.gb_kotlin">
+    package="com.lenakurasheva.notes">
 
     <application
         android:name="com.lenakurasheva.notes.ui.App"

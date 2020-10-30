@@ -9,7 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.core.content.ContextCompat
 import com.lenakurasheva.notes.common.dip
-import ru.geekbrains.gb_kotlin.R
+import com.lenakurasheva.notes.R
 
 // @JvmOverloads генерирует за нас стандартные перегрузки конструкторов
 class ColorCircleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
