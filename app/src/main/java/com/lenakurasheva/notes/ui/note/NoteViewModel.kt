@@ -1,5 +1,6 @@
 package com.lenakurasheva.notes.ui.note
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.lenakurasheva.notes.data.Repository
@@ -21,10 +22,12 @@ class NoteViewModel(val repository: Repository) : BaseViewModel<NoteViewState.Da
     private val notesObserver = object : Observer<NoteResult> {
         override fun onChanged(result: NoteResult?) {
             when (result) {
-                is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(NoteViewState.Data(result.data as? Note))
+                is NoteResult.Success<*> -> {
+                    pendingNote = result.data as? Note
+                    viewStateLiveData.value = NoteViewState(NoteViewState.Data(pendingNote))
+                }
                 is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
             }
-            // убираем подписку сразу после того, как получен результат, т.к. noteByIdLiveData - одноразовая
             noteByIdLiveData?.removeObserver(this)
         }
     }
@@ -57,7 +60,8 @@ class NoteViewModel(val repository: Repository) : BaseViewModel<NoteViewState.Da
     }
 
     // Этот метод будет вызван системой при окончательном уничтожении Activity:
-    override fun onCleared() {
+    @VisibleForTesting
+    public override fun onCleared() {
         pendingNote?.let {
             repository.saveNote(it)
         }

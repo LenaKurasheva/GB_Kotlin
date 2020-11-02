@@ -1,5 +1,6 @@
 package com.lenakurasheva.notes.ui.splash
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.lenakurasheva.notes.data.Repository
@@ -26,7 +27,8 @@ class SplashViewModel(val repository: Repository) : BaseViewModel<Boolean?, Spla
     }
 
     // Этот метод будет вызван системой при окончательном уничтожении Activity:
-    override fun onCleared() {
+    @VisibleForTesting
+    public override fun onCleared() {
         // убираем подписку в случае, если посреди запроса пользователь решил выйти назад, например
         currentUserLiveData?.removeObserver(currentUserObserver)
     }
