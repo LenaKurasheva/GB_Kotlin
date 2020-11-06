@@ -3,9 +3,11 @@ package com.lenakurasheva.notes.data.provider
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
+import com.google.rpc.Code
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.errors.NoAuthException
 import com.lenakurasheva.notes.data.model.NoteResult

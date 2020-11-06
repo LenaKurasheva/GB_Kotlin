@@ -11,7 +11,7 @@ import com.lenakurasheva.notes.ui.base.BaseViewModel
 class NoteViewModel(val repository: Repository) : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     init {
-        viewStateLiveData.value = NoteViewState()
+        viewStateLiveData.postValue(NoteViewState())
     }
 
     private var pendingNote: Note? = null
