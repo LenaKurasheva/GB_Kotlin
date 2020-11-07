@@ -13,7 +13,7 @@ import com.lenakurasheva.notes.common.getColorInt
 import com.lenakurasheva.notes.common.toColor
 import com.lenakurasheva.notes.data.entity.Color
 import kotlinx.android.synthetic.main.activity_note.*
-import ru.geekbrains.gb_kotlin.R
+import com.lenakurasheva.notes.R
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.ui.base.BaseActivity
 import org.koin.android.viewmodel.ext.android.viewModel
