@@ -1,34 +1,32 @@
 package com.lenakurasheva.notes.ui.main
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.lenakurasheva.notes.data.Repository
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
 import com.lenakurasheva.notes.ui.base.BaseViewModel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
 
-class MainViewModel(val repository: Repository) : BaseViewModel<List<Note>?, MainViewState>() {
-
-    private val notesObserver = Observer{ result: NoteResult? ->
-        result ?: return@Observer
-        when (result){
-            is NoteResult.Success<*> -> viewStateLiveData.value = MainViewState(result.data as? List<Note>)
-            is NoteResult.Error -> viewStateLiveData.value = MainViewState(error = result.error)
-        }
-    }
+class MainViewModel(val repository: Repository) : BaseViewModel<List<Note>?>() {
 
     private val repositoryNotes = repository.getNotes()
 
     init {
-        repositoryNotes.observeForever(notesObserver)
+        launch {
+            repositoryNotes.consumeEach { result ->
+                when (result){
+                    is NoteResult.Success<*> -> setData(result.data as? List<Note>)
+                    is NoteResult.Error -> setError(result.error)
+                }
+            }
+        }
     }
-
-    fun viewState(): LiveData<MainViewState> = viewStateLiveData
 
     @VisibleForTesting
     public override fun onCleared() {
         super.onCleared()
-        repositoryNotes.removeObserver(notesObserver)
+        repositoryNotes.cancel()
     }
 }
