@@ -1,6 +1,5 @@
 package com.lenakurasheva.notes.data.provider
 
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.lenakurasheva.notes.data.entity.Note
@@ -31,7 +30,7 @@ class FirestoreDataProvider(val store: FirebaseFirestore, val auth: FirebaseAuth
         continuation.resume(user)
     }
 
-    override fun subcribeToNotes(): ReceiveChannel<NoteResult> = Channel<NoteResult>(Channel.CONFLATED).apply {
+    override fun subscribeToNotes(): ReceiveChannel<NoteResult> = Channel<NoteResult>(Channel.CONFLATED).apply {
         try {
             notesReference.addSnapshotListener { snapshot, error ->
                 val value = error?.let {

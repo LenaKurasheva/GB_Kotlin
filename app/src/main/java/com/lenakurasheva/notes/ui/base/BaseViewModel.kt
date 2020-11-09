@@ -1,5 +1,6 @@
 package com.lenakurasheva.notes.ui.base
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,10 +21,13 @@ open class BaseViewModel <S>: ViewModel(), CoroutineScope {
     fun getViewState(): ReceiveChannel<S> = viewStateChannel.openSubscription()
     fun getErrorChannel(): ReceiveChannel<Throwable> = errorChannel
 
-    protected fun setError(e: Throwable) = launch{
+    @VisibleForTesting
+    fun setError(e: Throwable) = launch{
         errorChannel.send(e)
     }
-    protected fun setData(data: S) = launch {
+
+    @VisibleForTesting
+    fun setData(data: S) = launch {
         viewStateChannel.send(data)
     }
 

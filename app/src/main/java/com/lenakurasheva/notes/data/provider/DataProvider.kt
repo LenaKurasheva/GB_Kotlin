@@ -6,7 +6,7 @@ import com.lenakurasheva.notes.data.model.NoteResult
 import kotlinx.coroutines.channels.ReceiveChannel
 
 interface DataProvider {
-    fun subcribeToNotes(): ReceiveChannel<NoteResult>
+    fun subscribeToNotes(): ReceiveChannel<NoteResult>
     suspend fun saveNote(note: Note): Note
     suspend fun deleteNote(id: String)
     suspend fun getNoteById(id: String): Note

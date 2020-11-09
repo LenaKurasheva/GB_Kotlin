@@ -1,7 +1,6 @@
 package com.lenakurasheva.notes.ui.main
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Observer
 import com.lenakurasheva.notes.data.Repository
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
