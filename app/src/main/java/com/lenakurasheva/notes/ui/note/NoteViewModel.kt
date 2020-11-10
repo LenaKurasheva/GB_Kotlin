@@ -8,7 +8,8 @@ import kotlinx.coroutines.launch
 
 class NoteViewModel(val repository: Repository) : BaseViewModel<NoteData>() {
 
-    private var pendingNote: Note? = null
+    @VisibleForTesting
+    public var pendingNote: Note? = null
 
     fun saveChanges(note: Note) {
         pendingNote = note
