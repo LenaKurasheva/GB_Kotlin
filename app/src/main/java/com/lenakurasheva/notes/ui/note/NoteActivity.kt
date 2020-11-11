@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.VisibleForTesting
 import com.lenakurasheva.notes.common.getColorFromRes
 import com.lenakurasheva.notes.common.getColorInt
 import com.lenakurasheva.notes.common.toColor
@@ -34,7 +35,8 @@ class NoteActivity : BaseActivity<NoteData>() {
 
     override val viewModel: NoteViewModel by viewModel()
     override val layoutRes = R.layout.activity_note
-    private var note: Note? = null
+    @VisibleForTesting
+    var note: Note? = null
     private var color = Color.WHITE
 
     val textChangeListener = object : TextWatcher {

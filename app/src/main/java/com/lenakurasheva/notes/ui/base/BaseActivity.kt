@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.lenakurasheva.notes.data.errors.NoAuthException
@@ -26,7 +27,8 @@ abstract class BaseActivity<S> : AppCompatActivity(), CoroutineScope {
         Dispatchers.Main + Job()
     }
 
-    private lateinit var dataJob: Job
+    @VisibleForTesting
+    lateinit var dataJob: Job
     private lateinit var errorJob: Job
 
     abstract val viewModel : BaseViewModel<S>
@@ -58,7 +60,8 @@ abstract class BaseActivity<S> : AppCompatActivity(), CoroutineScope {
         coroutineContext.cancel()
     }
 
-    protected fun renderError(error: Throwable){
+    @VisibleForTesting
+    public fun renderError(error: Throwable){
         when(error){
             is NoAuthException -> startLogin()
             else -> error?.message?.let{

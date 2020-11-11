@@ -31,7 +31,6 @@ class NoteActivityTest{
 
     private val viewModel: NoteViewModel = mockk(relaxed = true)
 
-    private val viewStateLiveData = MutableLiveData<NoteViewState>()
     private val testNote = Note("333", "hello", "world")
 
     @Before
@@ -41,10 +40,10 @@ class NoteActivityTest{
                 module {
                     viewModel { viewModel }
                 }))
-        every { viewModel.getViewState() } returns viewStateLiveData
-        every { viewModel.loadNote(any()) } just runs
-        every { viewModel.saveChanges(any()) } just runs
-        every { viewModel.deleteNote() } just runs
+//        every { viewModel.getViewState() } returns viewStateLiveData
+//        every { viewModel.loadNote(any()) } just runs
+//        every { viewModel.saveChanges(any()) } just runs
+//        every { viewModel.deleteNote() } just runs
 
         // Запустим Activity, передав в Intent созданную заметку:
         Intent().apply {
@@ -94,7 +93,7 @@ class NoteActivityTest{
     @Test
     fun should_show_note() {
         activityTestRule.launchActivity(null)
-        viewStateLiveData.postValue(NoteViewState(NoteViewState.Data(note = testNote)))
+//        viewStateLiveData.postValue(NoteViewState(NoteViewState.Data(note = testNote)))
 
         onView(withId(R.id.et_title)).check(matches(withText(testNote.title)))
         onView(withId(R.id.et_body)).check(matches(withText(testNote.note)))

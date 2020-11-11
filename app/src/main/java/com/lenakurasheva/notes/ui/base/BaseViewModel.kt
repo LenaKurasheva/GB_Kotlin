@@ -15,8 +15,10 @@ open class BaseViewModel <S>: ViewModel(), CoroutineScope {
         Dispatchers.Default + Job()
     }
 
-    private val viewStateChannel = BroadcastChannel<S>(Channel.CONFLATED)
-    private val errorChannel = Channel<Throwable>()
+    @VisibleForTesting
+    public val viewStateChannel = BroadcastChannel<S>(Channel.CONFLATED)
+    @VisibleForTesting
+    public val errorChannel = Channel<Throwable>()
 
     fun getViewState(): ReceiveChannel<S> = viewStateChannel.openSubscription()
     fun getErrorChannel(): ReceiveChannel<Throwable> = errorChannel
