@@ -5,105 +5,77 @@ import androidx.lifecycle.MutableLiveData
 import com.lenakurasheva.notes.data.Repository
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
+import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.doReturn
+import kotlin.coroutines.CoroutineContext
 
 class NoteViewModelTest {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     private val mockRepository = mockk<Repository>()
-    private val noteLiveData = MutableLiveData<NoteResult>()
 
     private val testNote = Note("1", "title1", "text1")
+    private val testError = Throwable()
 
     private lateinit var viewModel: NoteViewModel
 
     @Before
     fun setup() {
         clearAllMocks()
-        every { mockRepository.getNoteById(testNote.id) } returns noteLiveData
-        every { mockRepository.deleteNote(testNote.id) } returns noteLiveData
-        every { mockRepository.saveNote(any()) } returns noteLiveData
+        coEvery { mockRepository.getNoteById(testNote.id) } returns testNote
+        coEvery { mockRepository.deleteNote(testNote.id) } returns Unit
+        coEvery { mockRepository.saveNote(any()) } returns testNote
         viewModel = NoteViewModel(mockRepository)
     }
 
-
     @Test
-    fun `loadNote should return NoteViewState Data`() {
-        var result: NoteViewState.Data? = null
-        val testData = NoteViewState.Data(testNote, false)
-        viewModel.viewStateLiveData.observeForever {
-            result = it.data
+    fun `loadNote should call setData`()  {
+        GlobalScope.launch {
+            viewModel.loadNote(testNote.id)
+            verify(exactly = 1) { viewModel.setData(any()) }
         }
-        viewModel.loadNote(testNote.id)
-        noteLiveData.value = NoteResult.Success(testNote)
-        assertTrue(result is NoteViewState.Data)
-        assertEquals(result?.note, testNote)
-        assertEquals(result?.isDeleted, false)
-    }
-
-
-    @Test
-    fun `loadNote should return error`() {
-        var result: Throwable? = null
-        val testData = Throwable("error")
-        viewModel.viewStateLiveData.observeForever {
-            result = it.error
-        }
-        viewModel.loadNote(testNote.id)
-        noteLiveData.value = NoteResult.Error(testData)
-        assertEquals(testData, result)
     }
 
     @Test
-    fun `deleteNote should return NoteViewState with isDeleted`() {
-        var result: NoteViewState.Data? = null
-        viewModel.viewStateLiveData.observeForever {
-            result = it.data
+    fun `loadNote should call setError`() {
+        coEvery { mockRepository.getNoteById(testNote.id) } throws testError
+        GlobalScope.launch {
+            viewModel.loadNote(testNote.id)
+            verify(exactly = 1) { viewModel.setError(testError) }
         }
-        viewModel.loadNote(testNote.id)
-        noteLiveData.value = NoteResult.Success(testNote)
-
-        viewModel.deleteNote()
-        noteLiveData.value = NoteResult.Success(null)
-        assertEquals(result?.isDeleted, true)
     }
 
     @Test
-    fun `deleteNote returns error`() {
-        var result: Throwable? = null
-        val testData = Throwable("error")
-        viewModel.viewStateLiveData.observeForever {
-            result = it.error
-        }
+    fun `deleteNote should call setData`() {
         viewModel.saveChanges(testNote)
-
-        viewModel.deleteNote()
-        noteLiveData.value = NoteResult.Error(testData)
-
-        assertEquals(testData, result)
+        GlobalScope.launch {
+            viewModel.deleteNote()
+            verify(exactly = 1) { viewModel.setData(any()) }
+            assertTrue(viewModel.pendingNote == null)
+        }
     }
 
     @Test
-    fun `should save changes`() {
-        viewModel.loadNote(testNote.id)
-        noteLiveData.value = NoteResult.Success(testNote)
-
-        viewModel.onCleared()
-        verify(exactly = 1) { mockRepository.saveNote(testNote) }
+    fun `deleteNote should call setError if deleteNote throws ex`() {
+        coEvery { mockRepository.getNoteById(testNote.id) } throws  testError
+        viewModel.saveChanges(testNote)
+        GlobalScope.launch {
+            viewModel.deleteNote()
+            verify(exactly = 1) { viewModel.setError(testError) }
+        }
     }
 
-    //TODO
     @Test
-    fun `should remove observer`() {
+    fun `repository should save changes in onCleared`() {
+        viewModel.saveChanges(testNote)
         viewModel.onCleared()
-        assertFalse(noteLiveData.hasObservers())
+        coVerify(exactly = 1) { mockRepository.saveNote(testNote) }
     }
+
 }

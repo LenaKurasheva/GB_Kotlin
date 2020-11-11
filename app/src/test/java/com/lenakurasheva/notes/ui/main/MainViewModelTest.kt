@@ -1,7 +1,6 @@
 package com.lenakurasheva.notes.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.lenakurasheva.notes.data.Repository
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.model.NoteResult
@@ -9,24 +8,31 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.launch
 
 class MainViewModelTest {
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
     private val mockRepository = mockk<Repository>()
-    private val repositoryNotesLiveData = MutableLiveData<NoteResult>() // = repositoryNotes
+    private val repositoryNotes = Channel<NoteResult>() // = repositoryNotes
+    val testData = listOf(Note("1"), Note("2"))
+    val testNoteResultSuccess = NoteResult.Success(testData)
+    val testError = Throwable()
 
     private lateinit var viewModel: MainViewModel
 
     @Before
     fun setup() {
         clearAllMocks()
-        every { mockRepository.getNotes() } returns repositoryNotesLiveData
+        every { mockRepository.getNotes() } returns repositoryNotes
         viewModel = MainViewModel(mockRepository)
     }
 
@@ -36,31 +42,26 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `should return Notes`() {
-        var result: List<Note>? = null
-        val testData = listOf(Note("1"), Note("2"))
-        viewModel.viewStateLiveData.observeForever {
-            result = it.data
+    fun `init should call setData`() {
+        GlobalScope.launch {
+            repositoryNotes.send(testNoteResultSuccess)
+            verify() { viewModel.setData(testData) }
         }
-        repositoryNotesLiveData.value = NoteResult.Success(testData)
-        assertEquals(testData, result)
     }
 
     @Test
-    fun `should return error`() {
-        var result: Throwable? = null
-        val testData = Throwable("error")
-        viewModel.viewStateLiveData.observeForever {
-            result = it.error
+    fun `init should call setError`() {
+        GlobalScope.launch {
+            repositoryNotes.send(NoteResult.Error(testError))
+            verify() { viewModel.setError(testError) }
         }
-        repositoryNotesLiveData.value = NoteResult.Error(error = testData)
-        assertEquals(testData, result)
     }
 
-
+    @ExperimentalCoroutinesApi
     @Test
-    fun `should remove observer`() {
+    fun `should cancel repositoryNotes channel`() {
         viewModel.onCleared()
-        assertFalse(repositoryNotesLiveData.hasObservers())
+        assertTrue(repositoryNotes.isClosedForReceive)
+        assertTrue(repositoryNotes.isClosedForSend)
     }
 }

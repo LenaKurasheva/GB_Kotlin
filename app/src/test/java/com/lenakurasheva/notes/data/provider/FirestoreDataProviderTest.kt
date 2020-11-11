@@ -3,18 +3,16 @@ package com.lenakurasheva.notes.data.provider
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
-import com.google.rpc.Code
 import com.lenakurasheva.notes.data.entity.Note
 import com.lenakurasheva.notes.data.errors.NoAuthException
 import com.lenakurasheva.notes.data.model.NoteResult
 import io.mockk.*
-import junit.framework.Assert
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
+import kotlinx.coroutines.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,51 +52,55 @@ class FirestoreDataProviderTest{
 
     @Test
     fun `should throw NoAuthException if no auth`(){
-        var result: Any? = null
+        var result: Throwable? = null
         every { mockAuth.currentUser } returns null
-        provider.getNotes().observeForever{
-            result = (it as? NoteResult.Error)?.error
-        }
+        val channel = provider.subscribeToNotes()
+        result = (channel.poll() as NoteResult.Error)?.error
         assertTrue(result is NoAuthException)
     }
 
     @Test
-    fun `getNotes should return notes`() {
+    fun `subscribeToNotes should return notes`() {
         var result: List<Note>? = null
         val mockSnapshot = mockk<QuerySnapshot>()
         val slot = slot<EventListener<QuerySnapshot>>()
         every { mockSnapshot.documents } returns listOf(mockDocument1, mockDocument2, mockDocument3)
         every { mockResultCollection.addSnapshotListener(capture(slot)) } returns mockk()
 
-        provider.getNotes().observeForever {
-            result = (it as NoteResult.Success<List<Note>>)?.data
-        }
-
+        val channel = provider.subscribeToNotes()
         slot.captured.onEvent(mockSnapshot, null)
+        result = (channel.poll() as NoteResult.Success<List<Note>>)?.data
 
         assertEquals(testNotes, result)
     }
 
     @Test
-    fun `getNotes should return error`() {
+    fun `subscribeToNotes should return error`() {
         var result: Throwable? = null
         val testError = mockk<FirebaseFirestoreException>()
         val slot = slot<EventListener<QuerySnapshot>>()
         every { mockResultCollection.addSnapshotListener(capture(slot)) } returns mockk()
 
-        provider.getNotes().observeForever {
-            result = (it as NoteResult.Error)?.error
-        }
+        val channel =  provider.subscribeToNotes()
         slot.captured.onEvent(null, testError)
+        result = (channel.poll() as NoteResult.Error)?.error
+
         assertEquals(testError, result)
     }
 
     @Test
     fun `saveNote calls set`() {
         val mockDocumentReference = mockk<DocumentReference>()
+        val testError = mockk<FirebaseFirestoreException>()
+        val slot = slot<OnFailureListener>()
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
-        provider.saveNote(testNotes[0])
-        verify(exactly = 1) { mockDocumentReference.set(testNotes[0]) }
+        every { mockDocumentReference.set(testNotes[0]).addOnSuccessListener(any()).addOnFailureListener(capture(slot)) } returns mockk()
+
+        GlobalScope.launch {
+            provider.saveNote(testNotes[0])
+            verify(exactly = 1) { mockDocumentReference.set(testNotes[0]) }
+            slot.captured.onFailure(testError)
+        }
     }
 
     @Test
@@ -109,11 +111,12 @@ class FirestoreDataProviderTest{
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.set(testNotes[0]).addOnSuccessListener(capture(slot)).addOnFailureListener(any()) } returns mockk()
 
-        provider.saveNote(testNotes[0]).observeForever {
-            result = (it as NoteResult.Success<Note>)?.data
+        GlobalScope.launch {
+            val note = provider.saveNote(testNotes[0])
+            slot.captured.onSuccess(null)
+            result = (note as NoteResult.Success<Note>)?.data
+            assertEquals(testNotes[0], result)
         }
-        slot.captured.onSuccess(null)
-        assertEquals(testNotes[0], result)
     }
 
     //TODO
@@ -126,19 +129,22 @@ class FirestoreDataProviderTest{
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.set(testNotes[0]).addOnSuccessListener(any()).addOnFailureListener(capture(slot)) } returns mockk()
 
-        provider.saveNote(testNotes[0]).observeForever {
-            result = (it as NoteResult.Error)?.error
+        GlobalScope.launch {
+            val error = provider.saveNote(testNotes[0])
+            slot.captured.onFailure(testError)
+            result = (error as NoteResult.Error)?.error
+            assertEquals(testError, result)
         }
-        slot.captured.onFailure(testError)
-        assertEquals(testError, result)
     }
 
     @Test
     fun `deleteNote calls delete`() {
         val mockDocumentReference = mockk<DocumentReference>()
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
-        provider.deleteNote(testNotes[0].id)
-        verify(exactly = 1) { mockDocumentReference.delete() }
+        GlobalScope.launch {
+            provider.deleteNote(testNotes[0].id)
+            verify(exactly = 1) { mockDocumentReference.delete() }
+        }
     }
 
     //TODO
@@ -150,11 +156,11 @@ class FirestoreDataProviderTest{
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.delete().addOnSuccessListener(capture(slot)).addOnFailureListener(any()) } returns mockk()
 
-        provider.deleteNote(testNotes[0].id).observeForever {
-            result = (it as NoteResult.Success<Note>)?.data
+        GlobalScope.launch {
+            result = provider.deleteNote(testNotes[0].id)
+            slot.captured.onSuccess(null)
+            assertEquals(null, result)
         }
-        slot.captured.onSuccess(null)
-        assertEquals(null, result)
     }
 
     //TODO
@@ -167,11 +173,12 @@ class FirestoreDataProviderTest{
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.delete().addOnSuccessListener(any()).addOnFailureListener(capture(slot)) } returns mockk()
 
-        provider.deleteNote(testNotes[0].id).observeForever {
-            result = (it as NoteResult.Error)?.error
+        GlobalScope.launch {
+            val error = provider.deleteNote(testNotes[0].id)
+            slot.captured.onFailure(testError)
+            result = (error as NoteResult.Error)?.error
+            assertEquals(testError, result)
         }
-        slot.captured.onFailure(testError)
-        assertEquals(testError, result)
     }
 
     //TODO
@@ -179,8 +186,10 @@ class FirestoreDataProviderTest{
     fun `getNoteById calls get`() {
         val mockDocumentReference = mockk<DocumentReference>()
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
-        provider.getNoteById(testNotes[0].id)
-        verify(exactly = 1) { mockDocumentReference.get() }
+        GlobalScope.launch {
+            provider.getNoteById(testNotes[0].id)
+            verify(exactly = 1) { mockDocumentReference.get() }
+        }
     }
 
     //TODO
@@ -194,11 +203,12 @@ class FirestoreDataProviderTest{
         every { mockDocumentReference.get().addOnSuccessListener(capture(slot)).addOnFailureListener(any()) } returns mockk()
         every { mockSnapshot.toObject(Note::class.java) as Note} returns testNotes[0]
 
-        provider.getNoteById(testNotes[0].id).observeForever {
-            result = (it as NoteResult.Success<Note>)?.data
+        GlobalScope.launch {
+            val note = provider.getNoteById(testNotes[0].id)
+            slot.captured.onSuccess(mockSnapshot)
+            result = (note as NoteResult.Success<Note>)?.data
+            assertEquals(testNotes[0], result)
         }
-        slot.captured.onSuccess(mockSnapshot)
-        assertEquals(testNotes[0], result)
     }
 
     //TODO
@@ -212,10 +222,11 @@ class FirestoreDataProviderTest{
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.get().addOnSuccessListener(any()).addOnFailureListener(capture(slot)) } returns mockk()
 
-        provider.getNoteById(testNotes[0].id).observeForever {
-            result = (it as NoteResult.Error)?.error
+        GlobalScope.launch {
+            val error = provider.getNoteById(testNotes[0].id)
+            slot.captured.onFailure(testError)
+            result = (error as NoteResult.Error)?.error
+            assertEquals(testError, result)
         }
-        slot.captured.onFailure(testError)
-        assertEquals(testError, result)
     }
 }

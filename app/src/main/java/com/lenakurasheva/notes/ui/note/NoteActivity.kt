@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.VisibleForTesting
 import com.lenakurasheva.notes.common.getColorFromRes
 import com.lenakurasheva.notes.common.getColorInt
 import com.lenakurasheva.notes.common.toColor
@@ -20,7 +21,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
 
     companion object {
         private const val EXTRA_NOTE = "note"
@@ -34,7 +35,8 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     override val viewModel: NoteViewModel by viewModel()
     override val layoutRes = R.layout.activity_note
-    private var note: Note? = null
+    @VisibleForTesting
+    var note: Note? = null
     private var color = Color.WHITE
 
     val textChangeListener = object : TextWatcher {
@@ -60,7 +62,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         initView()
     }
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if(data.isDeleted == true) finish()
 
         this.note = data.note
@@ -80,6 +82,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             et_body.setText(it.note)
 
             toolbar.setBackgroundColor(it.color.getColorInt(this))
+            this.color = it.color
         }
 
         colorPicker.onColorClickListener = {

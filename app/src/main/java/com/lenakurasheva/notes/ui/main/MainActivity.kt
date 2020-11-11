@@ -17,7 +17,7 @@ import com.lenakurasheva.notes.ui.note.NoteActivity
 import com.lenakurasheva.notes.ui.splash.SplashActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>() {
+class MainActivity : BaseActivity<List<Note>?>() {
 
     companion object{
         fun start(context: Context) = Intent(context, MainActivity::class.java).apply {
