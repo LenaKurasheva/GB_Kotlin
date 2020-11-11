@@ -14,6 +14,9 @@ import com.lenakurasheva.notes.common.getColorFromRes
 import com.lenakurasheva.notes.data.entity.Note
 import io.mockk.*
 import junit.framework.Assert.assertTrue
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.core.Is.`is`
 import org.junit.After
@@ -30,6 +33,8 @@ class NoteActivityTest{
     val activityTestRule = ActivityTestRule(NoteActivity::class.java, true, false)
 
     private val viewModel: NoteViewModel = mockk(relaxed = true)
+    private val noteDataChannel = Channel<NoteData>()
+    private val errorChannel = Channel<Throwable>()
 
     private val testNote = Note("333", "hello", "world")
 
@@ -40,10 +45,11 @@ class NoteActivityTest{
                 module {
                     viewModel { viewModel }
                 }))
-//        every { viewModel.getViewState() } returns viewStateLiveData
-//        every { viewModel.loadNote(any()) } just runs
-//        every { viewModel.saveChanges(any()) } just runs
-//        every { viewModel.deleteNote() } just runs
+        every { viewModel.getViewState() } returns noteDataChannel
+        every { viewModel.getErrorChannel() } returns errorChannel
+        every { viewModel.loadNote(any()) } returns mockk()
+        every { viewModel.saveChanges(any()) } just runs
+        every { viewModel.deleteNote() } returns mockk()
 
         // Запустим Activity, передав в Intent созданную заметку:
         Intent().apply {
@@ -91,12 +97,13 @@ class NoteActivityTest{
     }
 
     @Test
-    fun should_show_note() {
+    fun should_show_note()  {
         activityTestRule.launchActivity(null)
-//        viewStateLiveData.postValue(NoteViewState(NoteViewState.Data(note = testNote)))
-
-        onView(withId(R.id.et_title)).check(matches(withText(testNote.title)))
-        onView(withId(R.id.et_body)).check(matches(withText(testNote.note)))
+        GlobalScope.launch {
+            noteDataChannel.send(NoteData(testNote))
+            onView(withId(R.id.et_title)).check(matches(withText(testNote.title)))
+            onView(withId(R.id.et_body)).check(matches(withText(testNote.note)))
+        }
     }
 
     @Test
